@@ -13,6 +13,7 @@ void RemoveAll();
 void menu();
 void loading();
 bool phoneValidator(long long int ph);
+bool serialValidator(int sn);
 
 class record
 {
@@ -30,9 +31,14 @@ public:
         char nm[30];
         char em[30];
         long long int ph;
-
+    START:
         cout << "\n\t\t\t\t\t\t\t\t\tENTER SERIAL NUMBER:";
         cin >> sNo;
+        if (serialValidator(sNo) == false)
+        {
+            cout << "\n\t\t\t\t\t\t\t\t\tINVALID SERIAL NUMBER ENTERED!";
+            goto START;
+        }
         cout << "\n\t\t\t\t\t\t\t\t\tENTER NAME:";
         cin.ignore();
         cin.getline(nm, 30);
@@ -86,6 +92,28 @@ bool phoneValidator(long long int ph)
         if (ph == r.PhonenumberReturn())
         {
             cout << "\n\t\t\t\t\t\t\t\t\tTHIS PHONE NUMBER ALREADY EXISTS!";
+            return false;
+        }
+    }
+    fin.close();
+    return true;
+}
+
+bool serialValidator(int sn)
+{
+    if (sn < 0 || sn > 200)
+    {
+        return false;
+    }
+    ifstream fin;
+
+    fin.open("Record3.txt", ios::out | ios::binary | ios::app);
+
+    while (fin.read((char *)&r, sizeof(r)))
+    {
+        if (sn == r.SerialNumberReturn())
+        {
+            cout << "\n\t\t\t\t\t\t\t\t\tTHIS SERIAL NUMBER ALREADY EXISTS!";
             return false;
         }
     }
