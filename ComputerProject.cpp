@@ -24,6 +24,7 @@ public:
     long long int phno;
     int SerialNumberReturn() { return serialNo; }
     long long int PhonenumberReturn() { return phno; }
+    char *NameReturn() { return name; }
 
     void enterdetails()
     {
@@ -39,6 +40,32 @@ public:
             cout << "\n\t\t\t\t\t\t\t\t\tINVALID SERIAL NUMBER ENTERED!";
             goto START;
         }
+        cout << "\n\t\t\t\t\t\t\t\t\tENTER NAME:";
+        cin.ignore();
+        cin.getline(nm, 30);
+    RETRY:
+        cout << "\n\t\t\t\t\t\t\t\t\tENTER PHONE NUMBER: ";
+        cin >> ph;
+        cin.ignore();
+        if (phoneValidator(ph) == false)
+        {
+            cout << "\n\t\t\t\t\t\t\t\t\tINVALID PHONE NUMBER ENTERED!";
+            // cin.ignore();
+            goto RETRY;
+        }
+
+        cout << "\n\t\t\t\t\t\t\t\t\tENTER EMAIL: ";
+        cin.getline(em, 30);
+        feedDetails(sNo, nm, em, ph);
+    }
+
+    void enterdetails2(int sNo)
+    {
+        char nm[30];
+        char em[30];
+        long long int ph;
+        cout << "\n\t\t\t\t\t\t\t\t\tSERIAL NUMBER:" << sNo;
+
         cout << "\n\t\t\t\t\t\t\t\t\tENTER NAME:";
         cin.ignore();
         cin.getline(nm, 30);
@@ -143,37 +170,14 @@ void DisplayRecords()
     cout << "\n\t\t\t\t\t\t\t\t\tReading of Data File Completed......\n";
 }
 
-void SearchBySerialNo()
-{
-    ifstream fin;
-    int n, flag = 0;
-    fin.open("Record3.txt", ios::out | ios::binary | ios::app);
-    cout << "\n\t\t\t\t\t\t\t\t\tEnter Serial Number of Record To Display: ";
-    cin >> n;
-
-    while (fin.read((char *)&r, sizeof(r)))
-    {
-        if (n == r.SerialNumberReturn())
-        {
-            r.display();
-            flag++;
-            cout << "\n\n\t\t\t\t\t\t\t\t\t-----Record Found and Displayed-----\n";
-        }
-    }
-    fin.close();
-    if (flag == 0)
-        cout << "\n\t\t\t\t\t\t\t\t\tThe Record of Serial Number " << n << " is not in file....\n";
-    cout << "\n\t\t\t\t\t\t\t\t\tReading of Data File Completed-----\n";
-}
-
-void deleteRecord()
+void deleteRecordSerialNumber()
 {
     ifstream fin;
     ofstream fout;
     int n, flag = 0;
     fin.open("Record3.txt", ios::out | ios::binary | ios::app);
     fout.open("temp.txt", ios::out | ios::binary);
-    cout << "\n\t\t\t\t\t\t\t\t\tEnter Serial Number of Record To Delete : ";
+    cout << "\n\t\t\t\t\t\t\t\t\tEnter Serial Number : ";
     cin >> n;
 
     while (fin.read((char *)&r, sizeof(r)))
@@ -198,6 +202,95 @@ void deleteRecord()
     rename("temp.txt", "Record3.txt");
 }
 
+void deleteRecordPhoneNumber()
+{
+    ifstream fin;
+    ofstream fout;
+    long long int n;
+    int flag = 0;
+    fin.open("Record3.txt", ios::out | ios::binary | ios::app);
+    fout.open("temp.txt", ios::out | ios::binary);
+    cout << "\n\t\t\t\t\t\t\t\t\tEnter Phone Number To Search Record To Delete : ";
+    cin >> n;
+
+    while (fin.read((char *)&r, sizeof(r)))
+    {
+        if (n == r.PhonenumberReturn())
+        {
+            cout << "\n\t\t\t\t\t\t\t\t\tThe Following record is deleted....\n";
+            r.display();
+            flag++;
+        }
+        else
+        {
+            fout.write((char *)&r, sizeof(r));
+        }
+    }
+    fin.close();
+    fout.close();
+    if (flag == 0)
+        cout << "\n\t\t\t\t\t\t\t\t\tThe Record of Serial Number " << n << " is not in file....\n";
+    cout << "\n\t\t\t\t\t\t\t\t\tReading of Data File Completed......\n";
+    remove("Record3.txt");
+    rename("temp.txt", "Record3.txt");
+}
+
+void deleteRecordName()
+{
+    ifstream fin;
+    ofstream fout;
+    int flag = 0;
+    char *nm;
+    fin.open("Record3.txt", ios::out | ios::binary | ios::app);
+    fout.open("temp.txt", ios::out | ios::binary);
+    cout << "\n\t\t\t\t\t\t\t\t\tEnter Name To Search Record To Delete : ";
+    cin.ignore();
+    cin.getline(nm, 30);
+
+    while (fin.read((char *)&r, sizeof(r)))
+    {
+        if (strcmp(nm, r.NameReturn()) == 0)
+        {
+            cout << "\n\t\t\t\t\t\t\t\t\tThe Following record is deleted....\n";
+            r.display();
+            flag++;
+        }
+        else
+        {
+            fout.write((char *)&r, sizeof(r));
+        }
+    }
+    fin.close();
+    fout.close();
+    if (flag == 0)
+        cout << "\n\t\t\t\t\t\t\t\t\tThe Record of Serial Number " << n << " is not in file....\n";
+    cout << "\n\t\t\t\t\t\t\t\t\tReading of Data File Completed......\n";
+    remove("Record3.txt");
+    rename("temp.txt", "Record3.txt");
+}
+
+void deleteRecord()
+{
+    int n;
+    cout << "\n\t\t\t\t\t\t\t\t\t1.)Search By Phone Number ";
+    cout << "\n\t\t\t\t\t\t\t\t\t2.)Search By Serial Number ";
+    cout << "\n\t\t\t\t\t\t\t\t\t3.)Search By Name ";
+
+    cin >> n;
+
+    switch (n)
+    {
+    case 1:
+        break;
+    case 2:
+        break;
+    case 3:
+        break;
+    default:
+        break;
+    }
+}
+
 void modifyRecord()
 {
     fstream fio;
@@ -216,7 +309,7 @@ void modifyRecord()
             r.display();
             flag++;
             cout << "\n\t\t\t\t\t\t\t\t\tRe-Enter the New Details----\n";
-            r.enterdetails();
+            r.enterdetails2(n);
             fio.seekg(pos - sizeof(r));
             fio.write((char *)&r, sizeof(r));
             cout << "\n\t\t\t\t\t\t\t\t\t----Data Modified Successfully----\n";
@@ -240,6 +333,29 @@ void SearchByPhoneNo()
     while (fin.read((char *)&r, sizeof(r)))
     {
         if (n == r.PhonenumberReturn())
+        {
+            r.display();
+            flag++;
+            cout << "\n\n\t\t\t\t\t\t\t\t\t-----Record Found and Displayed-----\n";
+        }
+    }
+    fin.close();
+    if (flag == 0)
+        cout << "\n\t\t\t\t\t\t\t\t\tThe Record of Serial Number " << n << " is not in file....\n";
+    cout << "\n\t\t\t\t\t\t\t\t\tReading of Data File Completed-----\n";
+}
+
+void SearchBySerialNo()
+{
+    ifstream fin;
+    int n, flag = 0;
+    fin.open("Record3.txt", ios::out | ios::binary | ios::app);
+    cout << "\n\t\t\t\t\t\t\t\t\tEnter Serial Number of Record To Display: ";
+    cin >> n;
+
+    while (fin.read((char *)&r, sizeof(r)))
+    {
+        if (n == r.SerialNumberReturn())
         {
             r.display();
             flag++;
