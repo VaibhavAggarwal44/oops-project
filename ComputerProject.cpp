@@ -104,9 +104,20 @@ public:
 
 } r;
 
+int phlen(long long int ph)
+{
+    int ans = 0;
+    while (ph > 0)
+    {
+        ans++;
+        ph /= 10;
+    }
+    return ans;
+}
+
 bool phoneValidator(long long int ph)
 {
-    if (ph < 0)
+    if (ph < 0 || phlen(ph) != 10)
     {
         return false;
     }
