@@ -12,29 +12,52 @@ void SearchByPhoneNo();
 void RemoveAll();
 void menu();
 void loading();
-bool phoneValidator(string ph);
+bool phoneValidator(long long int ph);
 
 class record
 {
 public:
     int serialNo;
-    int SerialNumberReturn() { return serialNo; }
-    string PhonenumberReturn() { return phno; }
     char name[30];
     char email[30];
-    string phno;
+    long long int phno;
+    int SerialNumberReturn() { return serialNo; }
+    long long int PhonenumberReturn() { return phno; }
 
     void enterdetails()
     {
+        int sNo;
+        char nm[30];
+        char em[30];
+        long long int ph;
+
         cout << "\n\t\t\t\t\t\t\t\t\tENTER SERIAL NUMBER:";
-        cin >> serialNo;
+        cin >> sNo;
         cout << "\n\t\t\t\t\t\t\t\t\tENTER NAME:";
         cin.ignore();
-        cin.getline(name, 30);
+        cin.getline(nm, 30);
+    RETRY:
         cout << "\n\t\t\t\t\t\t\t\t\tENTER PHONE NUMBER: ";
-        getline(cin, phno);
+        cin >> ph;
+        cin.ignore();
+        if (phoneValidator(ph) == false)
+        {
+            cout << "\n\t\t\t\t\t\t\t\t\tINVALID PHONE NUMBER ENTERED!";
+            // cin.ignore();
+            goto RETRY;
+        }
+
         cout << "\n\t\t\t\t\t\t\t\t\tENTER EMAIL: ";
-        cin.getline(email, 30);
+        cin.getline(em, 30);
+        feedDetails(sNo, nm, em, ph);
+    }
+
+    void feedDetails(int sn, char nm[], char em[], long long int ph)
+    {
+        serialNo = sn;
+        phno = ph;
+        strcpy(name, nm);
+        strcpy(email, em);
     }
 
     void display()
@@ -47,6 +70,28 @@ public:
     }
 
 } r;
+
+bool phoneValidator(long long int ph)
+{
+    if (ph < 0)
+    {
+        return false;
+    }
+    ifstream fin;
+
+    fin.open("Record3.txt", ios::out | ios::binary | ios::app);
+
+    while (fin.read((char *)&r, sizeof(r)))
+    {
+        if (ph == r.PhonenumberReturn())
+        {
+            cout << "\n\t\t\t\t\t\t\t\t\tTHIS PHONE NUMBER ALREADY EXISTS!";
+            return false;
+        }
+    }
+    fin.close();
+    return true;
+}
 
 void EnterData()
 {
@@ -158,7 +203,7 @@ void modifyRecord()
 void SearchByPhoneNo()
 {
     ifstream fin;
-    string n;
+    long long int n;
     int flag = 0;
     fin.open("Record3.txt", ios::out | ios::binary | ios::app);
     cout << "\n\t\t\t\t\t\t\t\t\tEnter Phone Number of Record To Display: ";
