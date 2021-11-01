@@ -19,17 +19,17 @@ class record
 {
 public:
     int serialNo;
-    char name[30];
+    string name;
     char email[30];
     long long int phno;
     int SerialNumberReturn() { return serialNo; }
     long long int PhonenumberReturn() { return phno; }
-    char *NameReturn() { return name; }
+    string NameReturn() { return name; }
 
     void enterdetails()
     {
         int sNo;
-        char nm[30];
+        string nm;
         char em[30];
         long long int ph;
     START:
@@ -42,7 +42,7 @@ public:
         }
         cout << "\n\t\t\t\t\t\t\t\t\tENTER NAME:";
         cin.ignore();
-        cin.getline(nm, 30);
+        getline(cin, nm);
     RETRY:
         cout << "\n\t\t\t\t\t\t\t\t\tENTER PHONE NUMBER: ";
         cin >> ph;
@@ -61,14 +61,14 @@ public:
 
     void enterdetails2(int sNo)
     {
-        char nm[30];
+        string nm;
         char em[30];
         long long int ph;
         cout << "\n\t\t\t\t\t\t\t\t\tSERIAL NUMBER:" << sNo;
 
         cout << "\n\t\t\t\t\t\t\t\t\tENTER NAME:";
         cin.ignore();
-        cin.getline(nm, 30);
+        getline(cin, nm);
     RETRY:
         cout << "\n\t\t\t\t\t\t\t\t\tENTER PHONE NUMBER: ";
         cin >> ph;
@@ -85,11 +85,11 @@ public:
         feedDetails(sNo, nm, em, ph);
     }
 
-    void feedDetails(int sn, char nm[], char em[], long long int ph)
+    void feedDetails(int sn, string nm, char em[], long long int ph)
     {
         serialNo = sn;
         phno = ph;
-        strcpy(name, nm);
+        name = nm;
         strcpy(email, em);
     }
 
@@ -240,16 +240,16 @@ void deleteRecordName()
     ifstream fin;
     ofstream fout;
     int flag = 0;
-    char *nm;
+    string nm;
     fin.open("Record3.txt", ios::out | ios::binary | ios::app);
     fout.open("temp.txt", ios::out | ios::binary);
     cout << "\n\t\t\t\t\t\t\t\t\tEnter Name To Search Record To Delete : ";
     cin.ignore();
-    cin.getline(nm, 30);
+    getline(cin, nm);
 
     while (fin.read((char *)&r, sizeof(r)))
     {
-        if (strcmp(nm, r.NameReturn()) == 0)
+        if (nm == r.NameReturn())
         {
             cout << "\n\t\t\t\t\t\t\t\t\tThe Following record is deleted....\n";
             r.display();
@@ -263,7 +263,7 @@ void deleteRecordName()
     fin.close();
     fout.close();
     if (flag == 0)
-        cout << "\n\t\t\t\t\t\t\t\t\tThe Record of Serial Number " << n << " is not in file....\n";
+        cout << "\n\t\t\t\t\t\t\t\t\tThe Record of Serial Number " << nm << " is not in file....\n";
     cout << "\n\t\t\t\t\t\t\t\t\tReading of Data File Completed......\n";
     remove("Record3.txt");
     rename("temp.txt", "Record3.txt");
@@ -274,19 +274,23 @@ void deleteRecord()
     int n;
     cout << "\n\t\t\t\t\t\t\t\t\t1.)Search By Phone Number ";
     cout << "\n\t\t\t\t\t\t\t\t\t2.)Search By Serial Number ";
-    cout << "\n\t\t\t\t\t\t\t\t\t3.)Search By Name ";
+    cout << "\n\t\t\t\t\t\t\t\t\t3.)Search By Name \n\t\t\t\t\t\t\t\t\t";
 
     cin >> n;
 
     switch (n)
     {
     case 1:
+        deleteRecordPhoneNumber();
         break;
     case 2:
+        deleteRecordSerialNumber();
         break;
     case 3:
+        deleteRecordName();
         break;
     default:
+        cout << "Invalid Choice Entered";
         break;
     }
 }
@@ -453,7 +457,7 @@ void loading()
 
 int main()
 {
-    // loading();
+    loading();
 
     menu();
 
