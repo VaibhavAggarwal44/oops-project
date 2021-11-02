@@ -11,6 +11,8 @@ void modifyRecord();
 void SearchByPhoneNo();
 void RemoveAll();
 void menu();
+void administrator();
+void menuUser();
 void loading();
 bool phoneValidator(long long int ph);
 bool serialValidator(int sn);
@@ -394,6 +396,44 @@ void RemoveAll()
     cout << "\n\t\t\t\t\t\t\t\t\tDELETED ALL RECORDS!!!!";
 }
 
+int main()
+{
+
+    int ch;
+    do
+    {
+        system("cls");
+        cout << "\n\n\n\n\n\n";
+        cout << "\t\t\t\t\t\t\t\t-------------------------------------------------------\n";
+        cout << "\t\t\t\t\t\t\t\t-------------------------------------------------------\n";
+        cout << "\t\t\t\t\t\t\t\t|           PHONEBOOK APPLICATION SYSTEM              |\n";
+        cout << "\t\t\t\t\t\t\t\t-------------------------------------------------------\n";
+        cout << "\t\t\t\t\t\t\t\t-------------------------------------------------------\n";
+        cout << "\t\t\t\t\t\t\t\t|                [1]User                              |\n";
+        cout << "\t\t\t\t\t\t\t\t|                [2]Administrator Login               |\n";
+        cout << "\t\t\t\t\t\t\t\t|                [3]Exit                              |\n";
+        cout << "\t\t\t\t\t\t\t\t-------------------------------------------------------\n";
+        cout << "\t\t\t\t\t\t\t\t-------------------------------------------------------\n";
+        cout << "\t\t\t\t\t\t\t\t|                OOPS PROJECT                          |\n";
+        cout << "\t\t\t\t\t\t\t\t-------------------------------------------------------\n";
+        cin >> ch;
+        system("cls");
+        switch (ch)
+        {
+        case 1:
+            loading();
+            menuUser();
+            break;
+        case 2:
+            administrator();
+            break;
+        }
+        getch();
+    } while (ch != 3);
+
+    return 0;
+}
+
 void menu()
 {
     int ch;
@@ -415,7 +455,7 @@ void menu()
         cout << "\t\t\t\t\t\t\t\t|                [7]DELETE ALL CONTACTS               |\n";
         cout << "\t\t\t\t\t\t\t\t-------------------------------------------------------\n";
         cout << "\t\t\t\t\t\t\t\t-------------------------------------------------------\n";
-        cout << "\t\t\t\t\t\t\t\t|                   [8]EXIT                           |\n";
+        cout << "\t\t\t\t\t\t\t\t|                   [8]LOGOUT                         |\n";
         cout << "\t\t\t\t\t\t\t\t-------------------------------------------------------\n";
         cin >> ch;
         system("cls");
@@ -442,9 +482,50 @@ void menu()
         case 7:
             RemoveAll();
             break;
+        case 8:
+            return;
         }
         getch();
     } while (ch != 8);
+}
+
+void menuUser()
+{
+    int ch;
+    do
+    {
+        system("cls");
+        cout << "\n\n\n\n\n\n";
+        cout << "\t\t\t\t\t\t\t\t-------------------------------------------------------\n";
+        cout << "\t\t\t\t\t\t\t\t-------------------------------------------------------\n";
+        cout << "\t\t\t\t\t\t\t\t|           PHONEBOOK APPLICATION SYSTEM              |\n";
+        cout << "\t\t\t\t\t\t\t\t-------------------------------------------------------\n";
+        cout << "\t\t\t\t\t\t\t\t-------------------------------------------------------\n";
+        cout << "\t\t\t\t\t\t\t\t|                [1]DISPLAY CONTACTS                  |\n";
+        cout << "\t\t\t\t\t\t\t\t|                [2]SEARCH BY SERIAL NUMBER           |\n";
+        cout << "\t\t\t\t\t\t\t\t|                [3]SEARCH BY PHONE NUMBER            |\n";
+        cout << "\t\t\t\t\t\t\t\t-------------------------------------------------------\n";
+        cout << "\t\t\t\t\t\t\t\t-------------------------------------------------------\n";
+        cout << "\t\t\t\t\t\t\t\t|                   [4]EXIT                           |\n";
+        cout << "\t\t\t\t\t\t\t\t-------------------------------------------------------\n";
+        cin >> ch;
+        system("cls");
+        switch (ch)
+        {
+        case 1:
+            DisplayRecords();
+            break;
+        case 2:
+            SearchBySerialNo();
+            break;
+        case 3:
+            SearchByPhoneNo();
+            break;
+        case 4:
+            return;
+        }
+        getch();
+    } while (ch != 4);
 }
 
 void loading()
@@ -466,11 +547,41 @@ void loading()
     system("cls");
 }
 
-int main()
+void administrator()
 {
-    loading();
-
-    menu();
-
-    return 0;
+ADMIN:
+    string username;
+    string pass = "";
+    char ch;
+    cout << "\t\t\t\t\t\t\t\tEnter username\n\t\t\t\t\t\t\t\t";
+    cin >> username;
+    cout << endl;
+    cout << "\t\t\t\t\t\t\t\tEnter password\n\t\t\t\t\t\t\t\t";
+    ch = _getch();
+    while (ch != 13)
+    { //character 13 is enter
+        pass.push_back(ch);
+        cout << '*';
+        ch = _getch();
+    }
+    if ((pass == "qwerty" && username == "vaibhav") || (pass == "qwerty" && username == "vikas"))
+    {
+        loading();
+        menu();
+    }
+    else
+    {
+        cout << "\n\t\t\t\t\t\t\t\tAccess aborted...\n";
+        cout << "\n\t\t\t\t\t\t\t\tdo you want to try again?(y/n)  ";
+        char c;
+        cin >> c;
+        if (c == 'y' || c == 'Y')
+        {
+            goto ADMIN;
+        }
+        else
+        {
+            return;
+        }
+    }
 }
